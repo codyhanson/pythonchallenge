@@ -11,12 +11,14 @@ openedUrl = urllib2.urlopen(url)
 page = openedUrl.read()
 
 #extract the jumble from the page
-matchJunk = re.compile("<!--(.*?)-->\s+$",re.MULTILINE|re.DOTALL)
-junk = re.(matchJunk,page)
+matchJunk = re.compile("<!--(.*?)-->(\s)+$",re.DOTALL)
+junk = re.search(matchJunk,page)
 if (junk == None):
     print "didn't match"
 else:
     print junk.group(1)
+    print "###########"
+    print '#{0}#'.format(junk.group(2))
 
 #match one character
 pattern = re.compile(r"[a-z]") 

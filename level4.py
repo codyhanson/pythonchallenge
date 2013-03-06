@@ -8,7 +8,7 @@ baseurl = 'http://www.pythonchallenge.com/pc/def/linkedlist.php'
 
 nothingNumber = re.compile(r"(\d+)$")
 
-url = baseurl + '?nothing=0'
+url = baseurl + '?nothing=8022'
 
 nothingsSeen = {}
 

@@ -26,7 +26,6 @@ zipFp.close()
 z = zipfile.ZipFile('tmp/6/channel.zip','r')
 
 zhdl = z.open('readme.txt')
-
 print zhdl.read()
 
 #from readme.txt in channel.zip
@@ -51,4 +50,21 @@ while loop:
 
 #after following the nothings, we get the message "collect the comments"
 #I think this means collect the comments in the channel.jpg file
+
+#pull down the image
+urlImgHdl = urllib2.urlopen(urlImg)
+imageData = urlImgHdl.read()
+#turn bytes into hex string
+imageHex = "".join("{0:x}".format(ord(c)) for c in imageData)
+comments = ""
+for i in xrange(len(imageHex)):
+    if imageHex[i:i+4] == 'fffe':
+        j = i+5
+        while (imageHex[j:j+2] != 'ff'):
+            comments = comments + imageHex[j:j+2]
+            j = j + 2
+print comments.decode('hex')
+#seems like the only comment is 'Created By The Gimp'. perhaps a wrong turn.
+
+
 

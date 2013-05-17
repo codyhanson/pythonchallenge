@@ -2,48 +2,53 @@
 #Python Challenge, Level 6
 
 import urllib2
-import pickle
 import re
 import string
 import sys
-import StringIO
-from PIL import Image
+import zipfile
 
+#hints: Channel, <-- zip (means unzip?), now there are pairs
 url = 'http://www.pythonchallenge.com/pc/def/channel.html'
 urlImg = 'http://www.pythonchallenge.com/pc/def/channel.jpg'
 
-#hints: Channel, <-- zip (means unzip?), now there are pairs
+#disclaimer: I found online that this file existed. I was going the wrong direction.
+#I thought that 'zip' was referring to the zip function. I was doing crazy image processing things
+#on the channel.jpg
+urlZip = 'http://www.pythonchallenge.com/pc/def/channel.zip'
 
+urlZipHdl = urllib2.urlopen(urlZip)
+channelzip = urlZipHdl.read()
 
-urlImgHdl = urllib2.urlopen(urlImg)
-imageData = urlImgHdl.read()
+zipFp = open('tmp/6/channel.zip', 'w')
+zipFp.write(channelzip)
+zipFp.close()
 
-pairs = zip(*[imageData]*2)
+z = zipfile.ZipFile('tmp/6/channel.zip','r')
 
-bands = zip(*pairs)
-print bands
+zhdl = z.open('readme.txt')
 
-img = Image.merge("LA",bands)
+print zhdl.read()
 
-img.save("img.jpg")
+#from readme.txt in channel.zip
+#welcome to my zipped list.
+#hint1: start from 90052
+#hint2: answer is inside the zip
 
-#turn bytes into hex string
-#imageHex = ":".join("{0:x}".format(ord(c)) for c in imageData)
-imageHex = "".join("{0:x}".format(ord(c)) for c in imageData)
+nothing = '90052'
+nothingre = re.compile('(\d+)')
 
-#print imageHex
+loop = True
+while loop:
+    fname = nothing + '.txt'
+    zhdl = z.open(fname)
+    txt = zhdl.read()
+    m = re.search(nothingre,txt)
+    if (m is None):
+        print txt 
+        loop = False
+    else:
+        nothing = m.group(1)
 
-for i in xrange(len(imageHex)):
-    if imageHex[i:i+4] == 'fffe':
-        pass
-    #print imageHex[i:i+60].decode("hex")
-
-
-
-#sfp = StringIO.StringIO(imageData)
-#im = Image.open(sfp)
-
-#print im
-
-#z1,z2,z3 = zip(*imageData)
+#after following the nothings, we get the message "collect the comments"
+#I think this means collect the comments in the channel.jpg file
 
